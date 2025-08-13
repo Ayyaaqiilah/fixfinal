@@ -23,15 +23,15 @@ public class ProductsPage {
     }
 
     public void checkout() {
-        driver.findElement(cartButton).click();     // buka cart
-        driver.findElement(checkoutButton).click(); // klik checkout
+        driver.findElement(cartButton).click();
+        driver.findElement(checkoutButton).click();
 
         // isi form checkout info
         driver.findElement(firstNameField).sendKeys("John");
         driver.findElement(lastNameField).sendKeys("Doe");
         driver.findElement(zipField).sendKeys("12345");
-        driver.findElement(continueButton).click(); // lanjut ke overview
-        driver.findElement(finishButton).click();   // klik finish
+        driver.findElement(continueButton).click();
+        driver.findElement(finishButton).click();
     }
 
     public boolean isOrderConfirmed() {
