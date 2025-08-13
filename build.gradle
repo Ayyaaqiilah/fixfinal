@@ -1,0 +1,95 @@
+plugins {
+    id 'java'
+    id 'idea'
+}
+
+group = 'com.yourname'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    // Cucumber
+    testImplementation 'io.cucumber:cucumber-java:7.15.0'
+    testImplementation 'io.cucumber:cucumber-junit:7.15.0'
+    testImplementation 'io.cucumber:cucumber-core:7.15.0'
+    testImplementation 'io.cucumber:cucumber-picocontainer:7.15.0'
+
+    // Selenium
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.21.0'
+
+    // REST-assured
+    testImplementation 'io.rest-assured:rest-assured:5.4.0'
+
+    // Assertion & Utilities
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.17.2'
+
+    // JUnit
+    testImplementation 'junit:junit:4.13.2'
+
+    // Logging
+    testImplementation 'org.slf4j:slf4j-simple:2.0.9'
+
+    // WebDriverManager
+    implementation 'io.github.bonigarcia:webdrivermanager:5.9.2'
+
+    // Utils
+    implementation 'org.json:json:20240303'
+    implementation 'com.google.guava:guava:33.2.1-jre'
+    implementation 'org.apache.commons:commons-lang3:3.18.0'
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+// ---------------- API Test ----------------
+tasks.register('apiTest', JavaExec) {
+    mainClass = 'io.cucumber.core.cli.Main'
+    classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+    args = [
+            '--plugin', 'pretty',
+            '--plugin', 'html:build/reports/cucumber/api/index.html',
+            '--plugin', 'json:build/reports/cucumber/api/report.json',
+            '--glue', 'api.steps',
+            '--tags', '@api',
+            'src/test/resources/features/api'
+    ]
+    outputs.upToDateWhen { false }
+}
+
+// ---------------- Web Test ----------------
+tasks.register('webTest', JavaExec) {
+    mainClass = 'io.cucumber.core.cli.Main'
+    classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+    args = [
+            '--plugin', 'pretty',
+            '--plugin', 'html:build/reports/cucumber/web/index.html',
+            '--plugin', 'json:build/reports/cucumber/web/report.json',
+            '--glue', 'web.steps',
+            '--tags', '@web',
+            'src/test/resources/features/web'
+    ]
+    environment "CI_HEADLESS", "true"
+    outputs.upToDateWhen { false }
+}
+
+// ---------------- All Tests ----------------
+tasks.register('allTests') {
+    group = 'verification'
+    description = 'Run both API and Web tests'
+    dependsOn 'apiTest', 'webTest'
+}
+
+test {
+    useJUnit()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
