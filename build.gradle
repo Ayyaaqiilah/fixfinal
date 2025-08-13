@@ -80,12 +80,6 @@ tasks.register('webTest', JavaExec) {
     outputs.upToDateWhen { false }
 }
 
-// ---------------- All Tests ----------------
-tasks.register('allTests') {
-    group = 'verification'
-    description = 'Run both API and Web tests'
-    dependsOn 'apiTest', 'webTest'
-}
 
 test {
     useJUnit()
