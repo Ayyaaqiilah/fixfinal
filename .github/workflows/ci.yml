@@ -55,17 +55,20 @@ jobs:
 
       - name: Install Google Chrome stable
         run: |
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
+            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
+
+      - name: Check Chrome version
+        run: google-chrome --version
 
       - name: Install ChromeDriver
         run: |
-          CHROME_VERSION=$(google-chrome --version | grep -oP "\d+\.\d+")
-          DRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_$CHROME_VERSION")
-          wget https://storage.googleapis.com/chrome-for-testing-public/$DRIVER_VERSION/linux64/chromedriver-linux64.zip
-          unzip chromedriver-linux64.zip
-          sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
-          sudo chmod +x /usr/local/bin/chromedriver
+            CHROME_VERSION=$(google-chrome --version | grep -oP "\d+\.\d+\.\d+")
+            DRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_$CHROME_VERSION")
+            wget https://storage.googleapis.com/chrome-for-testing-public/$DRIVER_VERSION/linux64/chromedriver-linux64.zip
+            unzip chromedriver-linux64.zip
+            sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+            sudo chmod +x /usr/local/bin/chromedriver
 
       - name: Run Web UI Tests
         run: ./gradlew webTest
@@ -99,17 +102,20 @@ jobs:
 
       - name: Install Google Chrome stable
         run: |
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
+            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
+
+      - name: Check Chrome version
+        run: google-chrome --version
 
       - name: Install ChromeDriver
         run: |
-          CHROME_VERSION=$(google-chrome --version | grep -oP "\d+\.\d+")
-          DRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_$CHROME_VERSION")
-          wget https://storage.googleapis.com/chrome-for-testing-public/$DRIVER_VERSION/linux64/chromedriver-linux64.zip
-          unzip chromedriver-linux64.zip
-          sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
-          sudo chmod +x /usr/local/bin/chromedriver
+              CHROME_VERSION=$(google-chrome --version | grep -oP "\d+\.\d+\.\d+")
+              DRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_$CHROME_VERSION")
+              wget https://storage.googleapis.com/chrome-for-testing-public/$DRIVER_VERSION/linux64/chromedriver-linux64.zip
+              unzip chromedriver-linux64.zip
+              sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+              sudo chmod +x /usr/local/bin/chromedriver
 
       - name: Run All Tests
         run: ./gradlew allTests
